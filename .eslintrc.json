@@ -1,0 +1,9 @@
+{
+  "extends": ["next/core-web-vitals", "next/typescript"],
+  "ignorePatterns": [
+    "next-env.d.ts",
+    "static_analysis_semgrep_*",
+    ".supply-chain-risk-auditor",
+    "output"
+  ]
+}
