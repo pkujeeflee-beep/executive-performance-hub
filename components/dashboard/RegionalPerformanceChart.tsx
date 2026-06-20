@@ -10,10 +10,11 @@ import {
   XAxis,
   YAxis
 } from "recharts";
+import type { TooltipValueType } from "recharts";
 import { ChartCard } from "@/components/shared/ChartCard";
 import { StatusBadge } from "@/components/shared/StatusBadge";
 import { chartColors, statusLabels } from "@/lib/constants";
-import { formatCurrencyMillions, formatPercent } from "@/lib/formatters";
+import { formatCurrencyMillions, formatPercent, toNumber } from "@/lib/formatters";
 import type { RegionalPerformance } from "@/types/dashboard";
 
 export function RegionalPerformanceChart({ data }: { data: RegionalPerformance[] }) {
@@ -26,7 +27,7 @@ export function RegionalPerformanceChart({ data }: { data: RegionalPerformance[]
       className="xl:col-span-6"
     >
       <div className="h-[320px] w-full">
-        <ResponsiveContainer width="100%" height="100%">
+        <ResponsiveContainer width="100%" height="100%" minWidth={0} initialDimension={{ width: 560, height: 320 }}>
           <BarChart data={sortedData} layout="vertical" margin={{ left: 12, right: 24 }}>
             <CartesianGrid stroke={chartColors.grid} horizontal={false} />
             <XAxis
@@ -45,9 +46,9 @@ export function RegionalPerformanceChart({ data }: { data: RegionalPerformance[]
               tick={{ fill: "#334155", fontSize: 12 }}
             />
             <Tooltip
-              formatter={(value: number, name: string) => [
-                name === "revenue" ? formatCurrencyMillions(value) : value,
-                name
+              formatter={(value: TooltipValueType | undefined, name: number | string | undefined) => [
+                name === "revenue" ? formatCurrencyMillions(toNumber(value)) : toNumber(value),
+                name ?? ""
               ]}
               contentStyle={{ borderRadius: 8, borderColor: "#E5E7EB" }}
             />

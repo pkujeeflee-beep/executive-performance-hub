@@ -16,6 +16,13 @@ export function formatCurrencyMillions(value: number) {
   return `$${value.toFixed(1)}M`;
 }
 
+export function toNumber(value: number | string | ReadonlyArray<number | string> | undefined) {
+  const rawValue = Array.isArray(value) ? value[0] : value;
+  const numericValue = Number(rawValue ?? 0);
+
+  return Number.isFinite(numericValue) ? numericValue : 0;
+}
+
 export function formatPercent(value: number) {
   const sign = value > 0 ? "+" : "";
   return `${sign}${value.toFixed(value % 1 === 0 ? 0 : 1)}%`;

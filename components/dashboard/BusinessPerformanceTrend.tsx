@@ -9,10 +9,11 @@ import {
   XAxis,
   YAxis
 } from "recharts";
+import type { TooltipValueType } from "recharts";
 import { ChartCard } from "@/components/shared/ChartCard";
 import { Badge } from "@/components/ui/badge";
 import { chartColors } from "@/lib/constants";
-import { formatCurrencyMillions } from "@/lib/formatters";
+import { formatCurrencyMillions, toNumber } from "@/lib/formatters";
 import type { PerformanceTrendPoint } from "@/types/dashboard";
 
 export function BusinessPerformanceTrend({ data }: { data: PerformanceTrendPoint[] }) {
@@ -32,7 +33,7 @@ export function BusinessPerformanceTrend({ data }: { data: PerformanceTrendPoint
       action={<Badge variant="neutral">Jan-Jun</Badge>}
     >
       <div className="h-[340px] w-full">
-        <ResponsiveContainer width="100%" height="100%">
+        <ResponsiveContainer width="100%" height="100%" minWidth={0} initialDimension={{ width: 760, height: 340 }}>
           <LineChart data={data} margin={{ left: 0, right: 20, top: 10, bottom: 0 }}>
             <CartesianGrid stroke={chartColors.grid} strokeDasharray="3 3" vertical={false} />
             <XAxis
@@ -48,7 +49,10 @@ export function BusinessPerformanceTrend({ data }: { data: PerformanceTrendPoint
               tickFormatter={(value) => `$${value}M`}
             />
             <Tooltip
-              formatter={(value: number, name: string) => [formatCurrencyMillions(value), name]}
+              formatter={(value: TooltipValueType | undefined, name: number | string | undefined) => [
+                formatCurrencyMillions(toNumber(value)),
+                name ?? ""
+              ]}
               labelClassName="font-medium text-slate-900"
               contentStyle={{
                 borderRadius: 8,
